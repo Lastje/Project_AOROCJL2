@@ -3,7 +3,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="D:/School/Projecten/PW5/Project_AOROCJL2/lib/sqlite-jdbc-3.7.2.jar"/>
+=======
+	<classpathentry kind="lib" path="forms-1.3.0.jar" sourcepath="forms-1.3.0-src.zip"/>
+>>>>>>> a774a9aa7c9953d5a9bac0c6d4ac829399537b9a
 =======
 	<classpathentry kind="lib" path="forms-1.3.0.jar" sourcepath="forms-1.3.0-src.zip"/>
 >>>>>>> a774a9aa7c9953d5a9bac0c6d4ac829399537b9a
