@@ -1,3 +1,9 @@
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -9,16 +15,18 @@ import javax.swing.JOptionPane;
 public class Adresboek {
 
 	/**
+	 * Defined variables (will be accesible until app is destoyed)
+	 */
+	public static int iAuthenticatedUser;
+	
+	/**
 	 * Execute at launch
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
-		// create class instances
-		DBConnector dbConnection = new DBConnector();
-		
 		// connect to the database
-		String sConnectResult = dbConnection.connect();
+		String sConnectResult = DBConnector.connect();
 		
 		if(sConnectResult != "CONNECTED") {
 			
@@ -29,8 +37,12 @@ public class Adresboek {
 			
 		} else {
 			
-			// connection is made!
+			// connection is made! autenticate user
+			if(DBConnector.authenticateUser("Rik", "Brugman")) {
 			
+				// valid user, show mainscreen
+				
+			}
 			
 		}
 
