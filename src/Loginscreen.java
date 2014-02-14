@@ -77,14 +77,15 @@ public class Loginscreen extends JFrame {
 		
 		passwordField = new JPasswordField();
 		sl_contentPane.putConstraint(SpringLayout.NORTH, passwordField, -3, SpringLayout.NORTH, lblWachtwoord);
-		sl_contentPane.putConstraint(SpringLayout.WEST, passwordField, 36, SpringLayout.EAST, lblWachtwoord);
-		sl_contentPane.putConstraint(SpringLayout.EAST, passwordField, -145, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, passwordField, 10, SpringLayout.EAST, lblWachtwoord);
+		sl_contentPane.putConstraint(SpringLayout.EAST, passwordField, -155, SpringLayout.EAST, contentPane);
 		contentPane.add(passwordField);
+		passwordField.setColumns(10);
 		
 		textField = new JTextField();
 		sl_contentPane.putConstraint(SpringLayout.WEST, textField, -262, SpringLayout.EAST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, textField, 0, SpringLayout.SOUTH, lblGebruikersnaam);
-		sl_contentPane.putConstraint(SpringLayout.EAST, textField, -176, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, textField, -155, SpringLayout.EAST, contentPane);
 		contentPane.add(textField);
 		textField.setColumns(10);
 	}
