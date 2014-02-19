@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,7 +16,7 @@ import javax.swing.JOptionPane;
 public class Adresboek {
 
 	/**
-	 * Defined variables (will be accesible until app is destoyed)
+	 * Defined variables (will be accessible until app is destoyed)
 	 */
 	public static int iAuthenticatedUser;
 	
@@ -37,12 +38,9 @@ public class Adresboek {
 			
 		} else {
 			
-			// connection is made! autenticate user
-			if(DBConnector.authenticateUser("Rik", "Brugman")) {
-			
-				// valid user, show mainscreen
-				
-			}
+			// connection is made! create loginscreen
+			JFrame oLoginscreen = new Loginscreen();
+			oLoginscreen.setVisible(true);
 			
 		}
 

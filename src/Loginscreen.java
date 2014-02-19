@@ -2,22 +2,33 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
+
 import java.awt.Window.Type;
+
 import javax.swing.JButton;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 
 public class Loginscreen extends JFrame {
 
 	private JPanel contentPane;
 	private JPasswordField passwordField;
-	private JTextField textField;
+	private JTextField usernameField;
+	private JButton btnInloggen;
 
 	/**
 	 * Launch the application.
@@ -70,7 +81,34 @@ public class Loginscreen extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblWachtwoord, 10, SpringLayout.WEST, lblGebruikersnaam);
 		contentPane.add(lblWachtwoord);
 		
-		JButton btnInloggen = new JButton("Inloggen");
+		btnInloggen = new JButton("Inloggen");
+		btnInloggen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				// try to authenticate user
+				if(DBConnector.authenticateUser(usernameField.getText(), passwordField.getText())) {
+					
+					// hide login frame
+					setVisible(false);
+					
+					// show adminpanel frame
+					JFrame oAdminpanel = new Adminpanel();
+					oAdminpanel.setVisible(true);
+					
+					// unset login frame
+					dispose();
+					
+					
+				} else {
+					
+					JOptionPane.showMessageDialog(null, "Gebruikersnaam/wachtwoord onjuist.", "Adresboek", JOptionPane.ERROR_MESSAGE);
+					passwordField.setText("");
+					passwordField.grabFocus();
+					
+				}
+				
+			}
+		});
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnInloggen, 21, SpringLayout.SOUTH, lblWachtwoord);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnInloggen, 0, SpringLayout.WEST, lblGebruikersnaam);
 		contentPane.add(btnInloggen);
@@ -79,14 +117,26 @@ public class Loginscreen extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.NORTH, passwordField, -3, SpringLayout.NORTH, lblWachtwoord);
 		sl_contentPane.putConstraint(SpringLayout.WEST, passwordField, 10, SpringLayout.EAST, lblWachtwoord);
 		sl_contentPane.putConstraint(SpringLayout.EAST, passwordField, -155, SpringLayout.EAST, contentPane);
+		passwordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				if(e.getKeyChar() == e.VK_ENTER) {
+					
+					btnInloggen.doClick();
+					
+				}
+				
+			}
+		});
 		contentPane.add(passwordField);
 		passwordField.setColumns(10);
 		
-		textField = new JTextField();
-		sl_contentPane.putConstraint(SpringLayout.WEST, textField, -262, SpringLayout.EAST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, textField, 0, SpringLayout.SOUTH, lblGebruikersnaam);
-		sl_contentPane.putConstraint(SpringLayout.EAST, textField, -155, SpringLayout.EAST, contentPane);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		usernameField = new JTextField();
+		sl_contentPane.putConstraint(SpringLayout.WEST, usernameField, -262, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, usernameField, 0, SpringLayout.SOUTH, lblGebruikersnaam);
+		sl_contentPane.putConstraint(SpringLayout.EAST, usernameField, -155, SpringLayout.EAST, contentPane);
+		contentPane.add(usernameField);
+		usernameField.setColumns(10);
 	}
 }

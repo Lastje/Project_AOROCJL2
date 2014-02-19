@@ -63,23 +63,23 @@ public class DBConnector {
 	/**
 	 * Authenticate user login credentials
 	 * 
-	 * @param String sFirstname
-	 * @param String sLastname
+	 * @param String sUsername
+	 * @param String sPassword
 	 * @return boolean
 	 */
-	public static boolean authenticateUser(String sFirstname, String sLastname) {
+	public static boolean authenticateUser(String sUsername, String sPassword) {
 		
 		try {
 			
 			// execute query and obtain resultset
 	    	Statement statement = connection.createStatement();
-	        ResultSet resultSet = statement.executeQuery("SELECT * FROM Contact WHERE `voornaam` = '" + sFirstname + "' AND `achternaam` = '" + sLastname + "'");
+	        ResultSet resultSet = statement.executeQuery("SELECT * FROM Login INNER JOIN Contact ON Login.`Contact_id` = Contact.`ContactID` WHERE `gebruikersnaam` = '" + sUsername + "' AND `wachtwoord` = '" + sPassword + "'");
 	   
 	        // user doesn't exists, return false
 	        if(!resultSet.next()) return false;
 	        
 	        // user exists, store user ID
-	        Adresboek.iAuthenticatedUser = resultSet.getInt("id");
+	        Adresboek.iAuthenticatedUser = resultSet.getInt("Contact_id");
 	        
 	        // everything is OK, grant access
 			return true;
