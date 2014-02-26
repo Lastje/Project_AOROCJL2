@@ -4,6 +4,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="forms-1.3.0.jar" sourcepath="forms-1.3.0-src.zip"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.7.2.jar"/>
+>>>>>>> 24c0decdde60c7835bcdbc884645d4ea9c38440a
 =======
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.7.2.jar"/>
 >>>>>>> 24c0decdde60c7835bcdbc884645d4ea9c38440a
