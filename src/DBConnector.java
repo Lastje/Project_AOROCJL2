@@ -96,4 +96,48 @@ public class DBConnector {
 		
 	}
 	
+	/**
+	 * Create a vector from the resultsets
+	 * 
+	 * @return Vector
+	 */
+	public static Vector fillContactsList() {
+		
+		// create vector
+        Vector data = new Vector();
+		
+		try {
+			
+			// execute query and get resultset
+	    	Statement statement = connection.createStatement();
+	        ResultSet rs = statement.executeQuery("SELECT * FROM Contacts");
+	        
+	        // get column headers
+	        ResultSetMetaData rsmd = rs.getMetaData();
+	        int columnCount = rsmd.getColumnCount();
+	       
+	        // get resultset
+	        while (rs.next()) {
+	        	
+	        	// create a second vector
+	        	Vector row = new Vector(columnCount);
+	        	
+	        	// loop though data and push rows to the vector
+	            for (int i = 1; i <= columnCount; i++) {
+	            	row.addElement(rs.getString(i));
+	            }
+	            
+	            // add vector to global vector
+	            data.addElement(row);
+	        }
+	        
+	        
+	    } catch (SQLException e ) {
+	    	
+	    }
+		
+		// retouneer vector met alle rows
+		return data;
+	}
+	
 }
