@@ -14,6 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 
 
 public class newUser extends JFrame {
@@ -48,6 +49,8 @@ public class newUser extends JFrame {
 	 * Create the frame.
 	 */
 	public newUser() {
+		setTitle("Adresboek");
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\Documents\\GitHub\\Project_AOROCJL2\\Documenten\\icon.png"));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 410, 400);

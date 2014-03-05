@@ -32,6 +32,7 @@ import javax.swing.JScrollPane;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 
 public class Mainpanel extends JFrame {
@@ -67,6 +68,7 @@ public class Mainpanel extends JFrame {
 	 * Create the frame.
 	 */
 	public Mainpanel() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\Documents\\GitHub\\Project_AOROCJL2\\Documenten\\icon.png"));
 		setTitle("Adresboek");
 		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

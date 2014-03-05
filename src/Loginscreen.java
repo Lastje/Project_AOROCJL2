@@ -23,6 +23,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
+import java.awt.Toolkit;
 
 
 public class Loginscreen extends JFrame {
@@ -52,6 +53,7 @@ public class Loginscreen extends JFrame {
 	 * Create the frame.
 	 */
 	public Loginscreen() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\Documents\\GitHub\\Project_AOROCJL2\\Documenten\\icon.png"));
 		setTitle("Aanmelden op Adresboek");
 		setType(Type.POPUP);
 		setResizable(false);

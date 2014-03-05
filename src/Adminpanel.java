@@ -32,6 +32,7 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import java.awt.Toolkit;
 
 
 public class Adminpanel extends JFrame {
@@ -60,6 +61,8 @@ public class Adminpanel extends JFrame {
 	 * Create the frame.
 	 */
 	public Adminpanel() {
+		setTitle("Adresboek");
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\Documents\\GitHub\\Project_AOROCJL2\\Documenten\\icon.png"));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 500);
