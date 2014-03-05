@@ -52,6 +52,7 @@ public class Loginscreen extends JFrame {
 	 * Create the frame.
 	 */
 	public Loginscreen() {
+		setTitle("Aanmelden op Adresboek");
 		setType(Type.POPUP);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

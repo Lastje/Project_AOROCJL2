@@ -3,6 +3,8 @@ import java.awt.Component;
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.Box;
 import javax.swing.GroupLayout;
@@ -13,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
@@ -21,12 +24,29 @@ import javax.swing.JToolBar;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JScrollPane;
+
+import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class Mainpanel extends JFrame {
-	private static JTable table;
-
+	
+	JTable table;
+	public static JLabel lbl_voornaam;
+	public static JLabel lbl_achternaam;
+	public static JLabel lbl_geboortedatum;
+	public static JLabel lbl_adres;
+	public static JLabel lbl_city;
+	public static JLabel lbl_postcode;
+	public static JLabel lbl_telefoonnummer;
+	public static JLabel lbl_emailadres;
+	public static JLabel lbl_titel;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -35,19 +55,6 @@ public class Mainpanel extends JFrame {
 			public void run() {
 				try {
 					Mainpanel frame = new Mainpanel();
-					
-					DefaultTableModel tableMod = new DefaultTableModel() {
-
-					    @Override
-					    public boolean isCellEditable(int row, int column) {
-					       //all cells false
-					       return false;
-					    }
-					};
-					tableMod.setColumnCount(4);
-					
-					table.setModel(tableMod);
-					
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -60,6 +67,7 @@ public class Mainpanel extends JFrame {
 	 * Create the frame.
 	 */
 	public Mainpanel() {
+		setTitle("Adresboek");
 		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 987, 559);
@@ -102,6 +110,18 @@ public class Mainpanel extends JFrame {
 		toolBar.add(btnNewButton);
 		
 		JButton btnGeselecteerdVerwijderen = new JButton("Geselecteerd verwijderen");
+		btnGeselecteerdVerwijderen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				int iAnswer = JOptionPane.showConfirmDialog(null, "Wilt u deze gebruiker echt verwijderen?", "Gebruiker vewijderen", JOptionPane.YES_NO_OPTION);
+				
+				// delete selected user
+				if(iAnswer == JOptionPane.YES_OPTION) DBConnector.deleteUser(table.getValueAt(table.getSelectedRow(), 0).toString());
+				
+				table.setModel(DBConnector.createTableModel(DBConnector.executeQuery("SELECT * FROM `Contact`")));
+				
+			}
+		});
 		toolBar.add(btnGeselecteerdVerwijderen);
 		
 		Component horizontalGlue = Box.createHorizontalGlue();
@@ -111,21 +131,11 @@ public class Mainpanel extends JFrame {
 		btnAdminPanel.setHorizontalAlignment(SwingConstants.LEFT);
 		toolBar.add(btnAdminPanel);
 		
-		table = new JTable();
-		table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-			}
-		));
-		splitPane.setLeftComponent(table);
-		
 		JPanel panel = new JPanel();
 		splitPane.setRightComponent(panel);
 		
-		JLabel lblVoornaamAchternaam = new JLabel("Voornaam Achternaam");
-		lblVoornaamAchternaam.setFont(new Font("Arial", Font.PLAIN, 30));
+		lbl_titel = new JLabel("Voornaam Achternaam");
+		lbl_titel.setFont(new Font("Arial", Font.PLAIN, 30));
 		
 		JLabel lblVoornaam = new JLabel("Voornaam:");
 		lblVoornaam.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -172,39 +182,39 @@ public class Mainpanel extends JFrame {
 		JLabel lblEmailAdres = new JLabel("E-mail adres:");
 		lblEmailAdres.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JLabel label = new JLabel("<Voornaam>");
-		label.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lbl_voornaam = new JLabel("<Voornaam>");
+		lbl_voornaam.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		JLabel label_1 = new JLabel("<Achternaam>");
-		label_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lbl_achternaam = new JLabel("<Achternaam>");
+		lbl_achternaam.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		JLabel label_2 = new JLabel("<Geboortedatum>");
-		label_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lbl_geboortedatum = new JLabel("<Geboortedatum>");
+		lbl_geboortedatum.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		JLabel label_3 = new JLabel("<Straatnaam + Huisnummer>");
-		label_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lbl_adres = new JLabel("<Straatnaam + Huisnummer>");
+		lbl_adres.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		JLabel label_4 = new JLabel("<Woonplaats>");
-		label_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lbl_city = new JLabel("<Woonplaats>");
+		lbl_city.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		JLabel lblNewLabel_2 = new JLabel("<Postcode>");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lbl_postcode = new JLabel("<Postcode>");
+		lbl_postcode.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		JLabel label_5 = new JLabel("<Telefoonnummer>");
-		label_5.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lbl_telefoonnummer = new JLabel("<Telefoonnummer>");
+		lbl_telefoonnummer.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		JLabel label_6 = new JLabel("<E-mail adres>");
-		label_6.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lbl_emailadres = new JLabel("<E-mail adres>");
+		lbl_emailadres.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblVoornaamAchternaam, GroupLayout.PREFERRED_SIZE, 420, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
-						.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
-						.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+						.addComponent(lbl_titel, GroupLayout.PREFERRED_SIZE, 420, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
+						.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
+						.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
 								.addComponent(lblVoornaam, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -212,9 +222,9 @@ public class Mainpanel extends JFrame {
 								.addComponent(lblGeboortedatum, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-								.addComponent(label_2)
-								.addComponent(label_1)
-								.addComponent(label)))
+								.addComponent(lbl_geboortedatum)
+								.addComponent(lbl_achternaam)
+								.addComponent(lbl_voornaam)))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
 								.addComponent(lblNewLabel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -222,63 +232,63 @@ public class Mainpanel extends JFrame {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel.createSequentialGroup()
-									.addComponent(label_3)
+									.addComponent(lbl_adres)
 									.addGap(116)
 									.addComponent(lblHuisnummer)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(lblNewLabel_2))
-								.addComponent(label_4)))
+									.addComponent(lbl_postcode))
+								.addComponent(lbl_city)))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblTelefoonnummer)
 								.addComponent(lblEmailAdres))
 							.addGap(18)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-								.addComponent(label_6)
-								.addComponent(label_5))))
+								.addComponent(lbl_emailadres)
+								.addComponent(lbl_telefoonnummer))))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(5)
-					.addComponent(lblVoornaamAchternaam, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
+					.addComponent(lbl_titel, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblVoornaam)
-						.addComponent(label))
+						.addComponent(lbl_voornaam))
 					.addGap(11)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel)
-						.addComponent(label_1))
+						.addComponent(lbl_achternaam))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblGeboortedatum)
-						.addComponent(label_2))
+						.addComponent(lbl_geboortedatum))
 					.addGap(18)
 					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblStraat)
-						.addComponent(label_3)
+						.addComponent(lbl_adres)
 						.addComponent(lblHuisnummer)
-						.addComponent(lblNewLabel_2))
+						.addComponent(lbl_postcode))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_1)
-						.addComponent(label_4))
+						.addComponent(lbl_city))
 					.addGap(18)
 					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblTelefoonnummer)
-						.addComponent(label_5))
+						.addComponent(lbl_telefoonnummer))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblEmailAdres)
-						.addComponent(label_6))
+						.addComponent(lbl_emailadres))
 					.addGap(132))
 		);
 		
@@ -288,6 +298,55 @@ public class Mainpanel extends JFrame {
 		lblPersoonlijkeGegevens.setForeground(Color.WHITE);
 		lblPersoonlijkeGegevens.setFont(new Font("Tahoma", Font.BOLD, 11));
 		panel.setLayout(gl_panel);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setMinimumSize(new Dimension(500, 23));
+		splitPane.setLeftComponent(scrollPane);
+		
+		table = new JTable() {
+			public boolean isCellEditable(int row, int column){  
+				return false;
+			}  
+		};
+		
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+			@Override
+	        public void valueChanged(ListSelectionEvent event) {
+				
+				if(table.getColumnCount() > 0) Adresboek.getUserDetails(table.getValueAt(table.getSelectedRow(), 0).toString());
+				
+			}
+	    });
+		
+		table.setModel(DBConnector.createTableModel(DBConnector.executeQuery("SELECT * FROM `Contact`")));
+		scrollPane.setViewportView(table);
 		getContentPane().setLayout(groupLayout);
+	}
+	public JLabel getLabel() {
+		return lbl_voornaam;
+	}
+	public JLabel getLabel_1() {
+		return lbl_achternaam;
+	}
+	public JLabel getLabel_2() {
+		return lbl_geboortedatum;
+	}
+	public JLabel getLbl_adres() {
+		return lbl_adres;
+	}
+	public JLabel getLbl_city() {
+		return lbl_city;
+	}
+	public JLabel getLbl_postcode() {
+		return lbl_postcode;
+	}
+	public JLabel getLabel_5() {
+		return lbl_telefoonnummer;
+	}
+	public JLabel getLbl_emailadres() {
+		return lbl_emailadres;
+	}
+	public JLabel getLblVoornaamAchternaam() {
+		return lbl_titel;
 	}
 }

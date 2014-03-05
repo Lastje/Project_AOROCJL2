@@ -45,5 +45,32 @@ public class Adresboek {
 		}
 
 	}
+	
+	/**
+	 * Get user details and place them in the sidebar
+	 * 
+	 * @param sUserID
+	 */
+	public static void getUserDetails(String sUserID) {
+		
+		// execute query
+		ResultSet rs = DBConnector.executeQuery("SELECT * FROM Contact WHERE `ContactID` = '" + sUserID + "'");
+		
+		// change labels
+		try {
+			
+			Mainpanel.lbl_titel.setText(rs.getString("voornaam") + " " + rs.getString("achternaam"));
+			Mainpanel.lbl_voornaam.setText(rs.getString("voornaam"));
+			Mainpanel.lbl_achternaam.setText(rs.getString("achternaam"));
+			Mainpanel.lbl_geboortedatum.setText(rs.getString("geboortedatum"));
+			Mainpanel.lbl_adres.setText(rs.getString("adres"));
+			Mainpanel.lbl_city.setText(rs.getString("plaatsnaam"));
+			Mainpanel.lbl_postcode.setText(rs.getString("postcode"));
+			Mainpanel.lbl_telefoonnummer.setText(rs.getString("telefoon"));
+			Mainpanel.lbl_emailadres.setText(rs.getString("email"));
+			
+		} catch (SQLException e) {}
+		
+	}
 
 }

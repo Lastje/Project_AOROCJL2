@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 import org.sqlite.JDBC;
 
@@ -97,47 +98,106 @@ public class DBConnector {
 	}
 	
 	/**
-	 * Create a vector from the resultsets
+	 * Execute query and obtain ResultSet
 	 * 
+	 * @param sQuery
+	 * @return ResultSet
+	 */
+	public static ResultSet executeQuery(String sQuery) {
+		
+		// execute query and obtain resultset
+		try {
+			
+			Statement statement = connection.createStatement();
+			return statement.executeQuery(sQuery);
+			
+		} catch (SQLException e) {
+			
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			
+		}
+		
+		return null;
+		
+	}
+	
+	/**
+	 * Remove a user
+	 * 
+	 * @param String sUserID
+	 * @return ResultSet
+	 */
+	public static boolean deleteUser(String sUserID) {
+		
+		// execute query
+		try {
+			
+			Statement statement = connection.createStatement();
+			statement.executeQuery("DELETE FROM Contact WHERE `ContactID` = '" + sUserID + "'");
+			statement.executeQuery("DELETE FROM Login WHERE `Contact_id`  = '" + sUserID + "'");
+			
+			return true;
+			
+		} catch (SQLException e) {
+			
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	 * Create a Table Model for use in JTable
+	 * 
+	 * @param ResultSet rs
 	 * @return Vector
 	 */
-	public static Vector fillContactsList() {
-		
-		// create vector
-        Vector data = new Vector();
+	public static DefaultTableModel createTableModel(ResultSet rs) {
 		
 		try {
 			
-			// execute query and get resultset
-	    	Statement statement = connection.createStatement();
-	        ResultSet rs = statement.executeQuery("SELECT * FROM Contacts");
-	        
-	        // get column headers
-	        ResultSetMetaData rsmd = rs.getMetaData();
-	        int columnCount = rsmd.getColumnCount();
-	       
-	        // get resultset
-	        while (rs.next()) {
-	        	
-	        	// create a second vector
-	        	Vector row = new Vector(columnCount);
-	        	
-	        	// loop though data and push rows to the vector
-	            for (int i = 1; i <= columnCount; i++) {
-	            	row.addElement(rs.getString(i));
-	            }
-	            
-	            // add vector to global vector
-	            data.addElement(row);
-	        }
-	        
-	        
-	    } catch (SQLException e ) {
-	    	
-	    }
+			// get table meta
+			ResultSetMetaData metaData = rs.getMetaData();
+			
+			// create vector with columnnames
+		    Vector<String> columnNames = new Vector<String>();
+		    
+		    int columnCount = metaData.getColumnCount();
+		    
+		    // add columnnames to vector
+		    for (int column = 1; column <= columnCount; column++) columnNames.add(metaData.getColumnName(column));
+
+		    // data of the table
+		    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+		    
+		    // loop through records
+		    while (rs.next()) {
+		    	
+		    	// create new vector that holds a row
+		        Vector<Object> vector = new Vector<Object>();
+		        
+		        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++)  vector.add(rs.getObject(columnIndex));
+		        
+		        // add to vector
+		        data.add(vector);
+		    }
+		    
+		    // return table model
+		    return new DefaultTableModel(data, columnNames);
+			
+		} catch (SQLException e) {
+			
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			
+		}
+
+	    return null;
 		
-		// retouneer vector met alle rows
-		return data;
 	}
 	
 }
