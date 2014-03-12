@@ -123,6 +123,60 @@ public class DBConnector {
 	}
 	
 	/**
+	 * Create a user
+	 * 
+	 * @param String sFirstname
+	 * @param String sLastname
+	 * @param String sBirthdate
+	 * @param String sAddress
+	 * @param String sCity
+	 * @param String sZipcode
+	 * @param String sPhone
+	 * @param String sEmail
+	 * @return boolean
+	 */
+	public static boolean addUser(String sFirstname, String sLastname, String sBirthdate, String sAddress, String sCity, String sZipcode, String sPhone, String sEmail) {
+		
+		// execute query
+		try {
+			
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(""
+					+ "INSERT INTO Contact("
+						+ "`voornaam`,"
+						+ "`achternaam`,"
+						+ "`adres`,"
+						+ "`postcode`,"
+						+ "`plaatsnaam`,"
+						+ "`geboortedatum`,"
+						+ "`telefoon`,"
+						+ "`email`"
+					+ ") VALUES ("
+						+ "'" + sFirstname + "',"
+						+ "'" + sLastname + "',"
+						+ "'" + sAddress + "',"
+						+ "'" + sZipcode + "',"
+						+ "'" + sCity + "',"
+						+ "'" + sBirthdate + "',"
+						+ "'" + sPhone + "',"
+						+ "'" + sEmail + "'"
+					+ ")"
+			);
+
+			return true;
+			
+		} catch (SQLException e) {
+			
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			
+		}
+		
+		return false;
+		
+	}
+	
+	/**
 	 * Remove a user
 	 * 
 	 * @param String sUserID
@@ -134,8 +188,8 @@ public class DBConnector {
 		try {
 			
 			Statement statement = connection.createStatement();
-			statement.executeQuery("DELETE FROM Contact WHERE `ContactID` = '" + sUserID + "'");
-			statement.executeQuery("DELETE FROM Login WHERE `Contact_id`  = '" + sUserID + "'");
+			statement.executeUpdate("DELETE FROM Contact WHERE `ContactID` = '" + sUserID + "'");
+			statement.executeUpdate("DELETE FROM Login WHERE `Contact_id`  = '" + sUserID + "'");
 			
 			return true;
 			

@@ -6,6 +6,8 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  * Application Bootstrapper
@@ -25,6 +27,13 @@ public class Adresboek {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		// setup look and feel
+		try {
+			
+	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	        
+	    } catch (Exception e) {}
 		
 		// connect to the database
 		String sConnectResult = DBConnector.connect();
