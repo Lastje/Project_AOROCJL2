@@ -5,19 +5,26 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import net.miginfocom.swing.MigLayout;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.SystemColor;
 import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
-public class newUser extends JFrame {
+public class NewUser extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtVoornaam;
@@ -36,7 +43,7 @@ public class newUser extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					newUser frame = new newUser();
+					NewUser frame = new NewUser();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,17 +55,17 @@ public class newUser extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public newUser() {
+	public NewUser() {
 		setTitle("Adresboek");
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\Documents\\GitHub\\Project_AOROCJL2\\Documenten\\icon.png"));
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 410, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JLabel lblNieweGebruikerToevoegen = new JLabel("Nieuwe gebruiker toevoegen");
+		JLabel lblNieweGebruikerToevoegen = new JLabel("Nieuw contact toevoegen");
 		lblNieweGebruikerToevoegen.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		
 		JLabel lblNaam = new JLabel("Naam:");
@@ -123,11 +130,43 @@ public class newUser extends JFrame {
 		txtMail.setColumns(10);
 		
 		JButton button = new JButton("Aanmaken");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// insert data into the DB
+				boolean bInsertResult = DBConnector.addUser(
+												txtVoornaam.getText(),
+												txtAchternaam.getText(),
+												txtGeboortedatum.getText(),
+												txtAdres.getText(),
+												txtWoonplaats.getText(),
+												txtZip.getText(),
+												txtPhone.getText(),
+												txtMail.getText()
+										);
+				
+				// check for errors
+				if(!bInsertResult) {
+					
+					JOptionPane.showMessageDialog(null, "Er is een fout opgetreden. Probeer het opnieuw", "Nieuw contact", JOptionPane.ERROR_MESSAGE);
+					
+				} else {
+				
+					// update main grid
+					Mainpanel.table.setModel(DBConnector.createTableModel(DBConnector.executeQuery("SELECT * FROM `Contact`")));
+					
+					// dispose window
+					dispose();
+					
+				}
+				
+			}
+		});
 		button.setFont(new Font("Tahoma", Font.BOLD, 11));
 		button.setBackground(SystemColor.controlShadow);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(55)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -167,10 +206,10 @@ public class newUser extends JFrame {
 							.addComponent(txtMail, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE))
 						.addComponent(button, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(31, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-					.addContainerGap(40, Short.MAX_VALUE)
-					.addComponent(lblNieweGebruikerToevoegen, GroupLayout.PREFERRED_SIZE, 560, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(lblNieweGebruikerToevoegen, GroupLayout.PREFERRED_SIZE, 381, GroupLayout.PREFERRED_SIZE)
+					.addGap(179))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -214,7 +253,7 @@ public class newUser extends JFrame {
 						.addComponent(txtMail, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addComponent(button, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(36, Short.MAX_VALUE))
+					.addContainerGap(46, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

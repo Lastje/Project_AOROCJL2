@@ -1,10 +1,15 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog.ModalExclusionType;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
 
 import javax.swing.Box;
 import javax.swing.GroupLayout;
@@ -17,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -26,18 +32,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JScrollPane;
-
-import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Toolkit;
 
 
 public class Mainpanel extends JFrame {
 	
-	JTable table;
+	public static JTable table;
 	public static JLabel lbl_voornaam;
 	public static JLabel lbl_achternaam;
 	public static JLabel lbl_geboortedatum;
@@ -81,12 +80,44 @@ public class Mainpanel extends JFrame {
 		menuBar.add(mnprogramma);
 		
 		JMenuItem mntmAfmelden = new JMenuItem("Afmelden...");
+		mntmAfmelden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				// restart application and show loginscreen
+				StringBuilder cmd = new StringBuilder();
+	            cmd.append(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java ");
+	            for (String jvmArg : ManagementFactory.getRuntimeMXBean().getInputArguments()) {
+	                cmd.append(jvmArg + " ");
+	            }
+	            cmd.append("-cp ").append(ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+	            cmd.append(Adresboek.class.getName()).append(" ");
+
+	            try {
+	                Runtime.getRuntime().exec(cmd.toString());
+	            } catch (IOException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            }
+	            System.exit(0);
+				
+			}
+		});
 		mnprogramma.add(mntmAfmelden);
 		
 		JSeparator separator = new JSeparator();
 		mnprogramma.add(separator);
 		
 		JMenuItem mntmAfsluiten = new JMenuItem("Afsluiten");
+		mntmAfsluiten.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// remove form and shut down appilcation
+				dispose();
+				System.exit(0);
+				
+				
+			}
+		});
 		mnprogramma.add(mntmAfsluiten);
 		
 		JSplitPane splitPane = new JSplitPane();
@@ -109,6 +140,15 @@ public class Mainpanel extends JFrame {
 		);
 		
 		JButton btnNewButton = new JButton("Nieuw...");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// create new frame
+				JFrame newUserFrame = new NewUser();
+				newUserFrame.setVisible(true);
+
+			}
+		});
 		toolBar.add(btnNewButton);
 		
 		JButton btnGeselecteerdVerwijderen = new JButton("Geselecteerd verwijderen");
@@ -310,12 +350,13 @@ public class Mainpanel extends JFrame {
 				return false;
 			}  
 		};
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 			@Override
 	        public void valueChanged(ListSelectionEvent event) {
 				
-				if(table.getColumnCount() > 0) Adresboek.getUserDetails(table.getValueAt(table.getSelectedRow(), 0).toString());
+				if(table.getSelectedRow() > -1) Adresboek.getUserDetails(table.getValueAt(table.getSelectedRow(), 0).toString());
 				
 			}
 	    });
