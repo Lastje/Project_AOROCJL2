@@ -57,7 +57,6 @@ public class NewUser extends JFrame {
 	 */
 	public NewUser() {
 		setTitle("Adresboek");
-		setIconImage(Toolkit.getDefaultToolkit().getImage("res\\icon.png"));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 410, 400);
