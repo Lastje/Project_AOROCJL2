@@ -67,7 +67,7 @@ public class Mainpanel extends JFrame {
 	 * Create the frame.
 	 */
 	public Mainpanel() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\Documents\\GitHub\\Project_AOROCJL2\\Documenten\\icon.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("res\\icon.png"));
 		setTitle("Adresboek");
 		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -164,14 +164,21 @@ public class Mainpanel extends JFrame {
 				
 			}
 		});
+		
+		JButton btnGeselecteerdBewerken = new JButton("Geselecteerd bewerken");
+		btnGeselecteerdBewerken.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				// create new EditUser instance with the user ID
+				JFrame editDialog = new EditUser(Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString()));
+				
+				// show dialog
+				editDialog.setVisible(true);
+				
+			}
+		});
+		toolBar.add(btnGeselecteerdBewerken);
 		toolBar.add(btnGeselecteerdVerwijderen);
-		
-		Component horizontalGlue = Box.createHorizontalGlue();
-		toolBar.add(horizontalGlue);
-		
-		JButton btnAdminPanel = new JButton("Admin Panel");
-		btnAdminPanel.setHorizontalAlignment(SwingConstants.LEFT);
-		toolBar.add(btnAdminPanel);
 		
 		JPanel panel = new JPanel();
 		splitPane.setRightComponent(panel);

@@ -177,6 +177,52 @@ public class DBConnector {
 	}
 	
 	/**
+	 * Modify a user
+	 * 
+	 * @param int iUserID
+	 * @param String sFirstname
+	 * @param String sLastname
+	 * @param String sBirthdate
+	 * @param String sAddress
+	 * @param String sCity
+	 * @param String sZipcode
+	 * @param String sPhone
+	 * @param String sEmail
+	 * @return boolean
+	 */
+	public static boolean modifyUser(int iUserID, String sFirstname, String sLastname, String sBirthdate, String sAddress, String sCity, String sZipcode, String sPhone, String sEmail) {
+		
+		// execute query
+		try {
+			
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(
+					"UPDATE Contact SET"
+						+ "`voornaam`		= '" + sFirstname + "',"
+						+ "`achternaam`		= '" + sLastname + "',"
+						+ "`adres`			= '" + sAddress + "',"
+						+ "`postcode`		= '" + sZipcode + "',"
+						+ "`plaatsnaam`		= '" + sCity + "',"
+						+ "`geboortedatum`	= '" + sBirthdate + "',"
+						+ "`telefoon`		= '" + sPhone + "',"
+						+ "`email`			= '" + sEmail + "'"
+					+ "WHERE `ContactID` = '" + iUserID + "'"
+			);
+
+			return true;
+			
+		} catch (SQLException e) {
+			
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			
+		}
+		
+		return false;
+		
+	}
+	
+	/**
 	 * Remove a user
 	 * 
 	 * @param String sUserID

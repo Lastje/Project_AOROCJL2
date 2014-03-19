@@ -1,8 +1,13 @@
 import java.awt.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class EditUser extends JFrame {
@@ -16,6 +21,11 @@ public class EditUser extends JFrame {
 	private JTextField txtZip;
 	private JTextField txtPhone;
 	private JTextField txtMail;
+	
+	/**
+	 * Define the user ID to be edited
+	 */
+	private int iUserID;
 
 	/**
 	 * Launch the application.
@@ -24,7 +34,7 @@ public class EditUser extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					newUser frame = new newUser();
+					NewUser frame = new NewUser();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -36,11 +46,18 @@ public class EditUser extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EditUser() {
+	public EditUser(int iUserEditID) {
+		
+		// update user ID
+		this.iUserID = iUserEditID;
+		
+		// get user details
+		ResultSet userDetails = DBConnector.executeQuery("SELECT * FROM `Contact` WHERE `ContactID` = '" + this.iUserID + "' LIMIT 1");
+
 		setTitle("Adresboek");
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\Documents\\GitHub\\Project_AOROCJL2\\Documenten\\icon.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("res\\icon.png"));
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 410, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -78,39 +95,95 @@ public class EditUser extends JFrame {
 		JSeparator separator_1 = new JSeparator();
 		
 		txtVoornaam = new JTextField();
+		try {
+			txtVoornaam.setText(userDetails.getString("voornaam"));
+		} catch (SQLException e) {}
 		txtVoornaam.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtVoornaam.setColumns(10);
 		
 		txtAchternaam = new JTextField();
-		txtAchternaam.setText("\r\n");
+		try {
+			txtAchternaam.setText(userDetails.getString("achternaam"));
+		} catch (SQLException e) {}
 		txtAchternaam.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtAchternaam.setColumns(10);
 		
 		txtGeboortedatum = new JTextField();
+		try {
+			txtGeboortedatum.setText(userDetails.getString("geboortedatum"));
+		} catch (SQLException e) {}
 		txtGeboortedatum.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtGeboortedatum.setColumns(10);
 		
 		txtAdres = new JTextField();
+		try {
+			txtAdres.setText(userDetails.getString("adres"));
+		} catch (SQLException e) {}
 		txtAdres.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtAdres.setColumns(10);
 		
 		txtWoonplaats = new JTextField();
+		try {
+			txtWoonplaats.setText(userDetails.getString("plaatsnaam"));
+		} catch (SQLException e) {}
 		txtWoonplaats.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtWoonplaats.setColumns(10);
 		
 		txtZip = new JTextField();
+		try {
+			txtZip.setText(userDetails.getString("postcode"));
+		} catch (SQLException e) {}
 		txtZip.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtZip.setColumns(10);
 		
 		txtPhone = new JTextField();
+		try {
+			txtPhone.setText(userDetails.getString("telefoon"));
+		} catch (SQLException e) {}
 		txtPhone.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtPhone.setColumns(10);
 		
 		txtMail = new JTextField();
+		try {
+			txtMail.setText(userDetails.getString("email"));
+		} catch (SQLException e) {}
 		txtMail.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtMail.setColumns(10);
 		
 		JButton btnOpslaan = new JButton("Opslaan");
+		btnOpslaan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				// insert data into the DB
+				boolean bInsertResult = DBConnector.modifyUser(
+												iUserID,
+												txtVoornaam.getText(),
+												txtAchternaam.getText(),
+												txtGeboortedatum.getText(),
+												txtAdres.getText(),
+												txtWoonplaats.getText(),
+												txtZip.getText(),
+												txtPhone.getText(),
+												txtMail.getText()
+										);
+				
+				// check for errors
+				if(!bInsertResult) {
+					
+					JOptionPane.showMessageDialog(null, "Er is een fout opgetreden. Probeer het opnieuw", "Contact bewerken", JOptionPane.ERROR_MESSAGE);
+					
+				} else {
+				
+					// update main grid
+					Mainpanel.table.setModel(DBConnector.createTableModel(DBConnector.executeQuery("SELECT * FROM `Contact`")));
+					
+					// dispose window
+					dispose();
+					
+				}
+				
+			}
+		});
 		btnOpslaan.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnOpslaan.setBackground(SystemColor.controlShadow);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
