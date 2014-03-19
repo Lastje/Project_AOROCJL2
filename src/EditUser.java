@@ -55,7 +55,6 @@ public class EditUser extends JFrame {
 		ResultSet userDetails = DBConnector.executeQuery("SELECT * FROM `Contact` WHERE `ContactID` = '" + this.iUserID + "' LIMIT 1");
 
 		setTitle("Adresboek");
-		setIconImage(Toolkit.getDefaultToolkit().getImage("res\\icon.png"));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 410, 400);

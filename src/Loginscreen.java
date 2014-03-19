@@ -53,7 +53,6 @@ public class Loginscreen extends JFrame {
 	 * Create the frame.
 	 */
 	public Loginscreen() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("res\\icon.png"));
 		setTitle("Aanmelden op Adresboek");
 		setType(Type.POPUP);
 		setResizable(false);

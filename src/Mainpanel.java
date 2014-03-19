@@ -67,7 +67,6 @@ public class Mainpanel extends JFrame {
 	 * Create the frame.
 	 */
 	public Mainpanel() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("res\\icon.png"));
 		setTitle("Adresboek");
 		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,34 +77,6 @@ public class Mainpanel extends JFrame {
 		
 		JMenu mnprogramma = new JMenu("Programma");
 		menuBar.add(mnprogramma);
-		
-		JMenuItem mntmAfmelden = new JMenuItem("Afmelden...");
-		mntmAfmelden.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				// restart application and show loginscreen
-				StringBuilder cmd = new StringBuilder();
-	            cmd.append(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java ");
-	            for (String jvmArg : ManagementFactory.getRuntimeMXBean().getInputArguments()) {
-	                cmd.append(jvmArg + " ");
-	            }
-	            cmd.append("-cp ").append(ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
-	            cmd.append(Adresboek.class.getName()).append(" ");
-
-	            try {
-	                Runtime.getRuntime().exec(cmd.toString());
-	            } catch (IOException e) {
-	                // TODO Auto-generated catch block
-	                e.printStackTrace();
-	            }
-	            System.exit(0);
-				
-			}
-		});
-		mnprogramma.add(mntmAfmelden);
-		
-		JSeparator separator = new JSeparator();
-		mnprogramma.add(separator);
 		
 		JMenuItem mntmAfsluiten = new JMenuItem("Afsluiten");
 		mntmAfsluiten.addActionListener(new ActionListener() {
